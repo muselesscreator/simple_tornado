@@ -1,0 +1,35 @@
+<html>
+
+  <head>
+    <script src='js/ext/underscore-min.js'></script>
+    <script src='js/ext/underscore.string.js'></script>
+    <script src='js/ext/jquery.min.js'></script>
+    <script src='js/socket.js'></script>
+  </head>
+
+  <body>
+    This is a test.<br />
+    There is some stuff.<br />
+    Input Value: <input type='text' id='testText'></input><br />
+    <button type='button' id='testButton'>Send a message</button><br />
+    This is the output of the stream.
+    <div id='testOutput'></div>
+    <script>
+
+      $(document).ready(function() {
+        var sockManager = new SocketManager(8282);
+        var newStream = sockManager.makeStream('test_socket');
+        newStream.register(function(msg) {
+          console.log(msg);
+          $('#testOutput').text(msg.text);
+        });
+        $('#testButton').on('click', function() {
+          console.log($('#testText').val());
+          newStream.send({'text': $('#testText').val()});
+        });
+      });
+
+    </script>
+  </body>
+
+</html>
